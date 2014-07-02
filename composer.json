@@ -1,0 +1,21 @@
+{
+    "name": "crysalead/string",
+    "description": "String manipulation library",
+    "keywords": ["String manipulation"],
+    "license": "MIT",
+    "require": {
+        "php": ">=5.4",
+        "crysalead/set": "dev-master",
+        "crysalead/kahlan": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "string\\": "src/",
+            "string\\spec\\": "spec/"
+        }
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "minimum-stability": "dev"
+}
