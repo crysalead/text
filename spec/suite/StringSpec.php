@@ -1,5 +1,5 @@
 <?php
-namespace string\spec;
+namespace string\spec\suite;
 
 use stdClass;
 use Exception;
@@ -9,7 +9,7 @@ use InvalidArgumentException;
 
 describe("String", function() {
 
-    describe("insert", function() {
+    describe("::insert()", function() {
 
         it("inserts scalar variables in a string", function() {
 
@@ -72,11 +72,7 @@ describe("String", function() {
 
     });
 
-});
-
-describe("String", function() {
-
-    describe("clean", function() {
+    describe("::clean()", function() {
 
         it("cleans placeholder", function() {
 
@@ -155,11 +151,7 @@ describe("String", function() {
 
     });
 
-});
-
-describe("String", function() {
-
-    describe("toString", function() {
+    describe("::toString()", function() {
 
         it("exports an empty array", function() {
 
@@ -317,11 +309,7 @@ describe("String", function() {
 
     });
 
-});
-
-describe("String", function() {
-
-    describe("dump", function() {
+    describe("::dump()", function() {
 
         it("dumps null to a string dump", function() {
 
