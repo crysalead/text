@@ -13,7 +13,7 @@ class Text
      *
      * Usage:
      * {{{
-     * String::insert(
+     * Text::insert(
      *     'My name is {:name} and I am {:age} years old.', ['name' => 'Bob', 'age' => '65']
      * );
      * }}}
@@ -28,7 +28,7 @@ class Text
      *                           place-holder (defaults to `}`).
      *                         - `'escape'`: The character or string used to escape the before character or string
      *                           (defaults to `'\\'`).
-     *                         - `'clean'`: A boolean or array with instructions for `String::clean()`.
+     *                         - `'clean'`: A boolean or array with instructions for `Text::clean()`.
      * @return string
      */
     public static function insert($str, $data, $options = [])
@@ -52,9 +52,9 @@ class Text
     }
 
     /**
-     * Cleans up a `String::insert()` formatted string with given `$options` depending
+     * Cleans up a `Text::insert()` formatted string with given `$options` depending
      * on the `'clean'` option. The goal of this function is to replace all whitespace
-     * and unneeded mark-up around place-holders that did not get replaced by `String::insert()`.
+     * and unneeded mark-up around place-holders that did not get replaced by `Text::insert()`.
      *
      * @param  string $str     The string to clean.
      * @param  array  $options Available options are:
@@ -96,161 +96,6 @@ class Text
             $str = preg_replace('/' . preg_quote($escape) . preg_quote($before) . '/', $before, $str);
         }
         return $str;
-    }
-
-    /**
-     * Generate a string representation of arbitrary data.
-     *
-     * @param  string $value   The data to dump in string.
-     * @param  array  $options Available options are:
-     *                         - `'quote'` : dump will quote string data if true (default `true`).
-     *                         - `'object'`: dump options for objects.
-     *                             - `'method'`: default method to call on string instance (default `__toString`).
-     *                         - `'array'` : dump options for arrays.
-     *                             - `'indent'`: level of indent (defaults to `1`).
-     *                             - `'char'`: indentation character.
-     *                             - `'multiplier'`: number of indentation character per indent (default `4`)
-     * @return string The dumped string.
-     */
-    public static function toString($value, $options = [])
-    {
-        $defaults = [
-            'quote'  => '"',
-            'object' => [],
-            'array'  => []
-        ];
-
-        $options += $defaults;
-        $options['object'] += ['method' => '__toString'];
-        $options['array'] += ['indent' => 1,
-            'char' => ' ',
-            'multiplier' => 4
-        ];
-
-        if ($value instanceof Closure) {
-            return '`Closure`';
-        }
-        if (is_array($value)) {
-            return static::_arrayToString($value, $options);
-        }
-        if (is_object($value)) {
-            return static::_objectToString($value, $options);
-        }
-        return static::dump($value, $options['quote']);
-    }
-
-    /**
-     * Generate a string representation of an array.
-     *
-     * @param  array  $datas   An array.
-     * @param  array  $options An array of options.
-     * @return string          The dumped string.
-     */
-    protected static function _arrayToString($datas, $options)
-    {
-        if (!count($datas)) {
-            return '[]';
-        }
-
-        extract($options['array']);
-        $comma = false;
-
-        $tab = str_repeat($char, $indent * $multiplier);
-
-        $string = "[\n";
-
-        foreach($datas as $key => $value) {
-            if ($comma) {
-                $string .= ",\n";
-            }
-            $comma = true;
-            $key = filter_var($key, FILTER_VALIDATE_INT) ? $key : static::dump($key, $options['quote']);
-            $string .= $tab . $key . ' => ';
-            if (is_array($value)) {
-                $options['array']['indent'] = $indent + 1;
-                $string .= static::_arrayToString($value, $options);
-            } else {
-                $string .= static::toString($value, $options);
-            }
-        }
-        $tab = str_repeat($char, ($indent - 1) * $multiplier);
-        return $string . "\n" . $tab . "]";
-    }
-
-    /**
-     * Generate a string representation of an object.
-     *
-     * @param  array  $value The object.
-     * @return string        The dumped string.
-     */
-    protected static function _objectToString($value, $options) {
-        if ($value instanceof Exception) {
-            $msg = '`' . get_class($value) .'` Code(' . $value->getCode() . ') with ';
-            $message = $value->getMessage();
-            if ($message) {
-                $msg .= 'message '. static::dump($value->getMessage());
-            } else {
-                $msg .= 'no message';
-            }
-            return $msg . ' in '. $value->getFile() . ':' . $value->getLine();
-        }
-        $method = $options['object']['method'];
-        if (is_callable($method)) {
-            return $method($value);
-        }
-        if (!$method  || !method_exists($value, $method)) {
-            return '`' . get_class($value) . '`';
-        }
-        return $value->{$method}();
-    }
-
-    /**
-     * Dump some scalar data using a string representation
-     *
-     * @param  mixed  $value The scalar data to dump
-     * @return string        The dumped string.
-     */
-    public static function dump($value, $quote = '"') {
-        if (is_bool($value)) {
-            return $value ? 'true' : 'false';
-        }
-        if (is_null($value)) {
-            return 'null';
-        }
-        if (!$quote || !is_string($value)) {
-            return (string) $value;
-        }
-        if ($quote === '"') {
-            return $quote . static::_dump($value). $quote;
-        }
-        return $quote . addcslashes($value, $quote) . $quote;
-    }
-
-    /**
-     * Expands escape sequences and escape special chars in a string.
-     *
-     * @param  string $string A string which contain escape sequence.
-     * @return string         A valid double quotable string.
-     */
-    protected static function _dump($string)
-    {
-        $es = ['0', 'x07', 'x08', 't', 'n', 'v', 'f', 'r'];
-        $unescaped = '';
-        $chars = str_split($string);
-        foreach ($chars as $char) {
-            if ($char === '') {
-                continue;
-            }
-            $value = ord($char);
-            if ($value >= 7 && $value <= 13) {
-                $unescaped .= '\\' . $es[$value - 6];
-            } elseif ($char === '"' || $char === '$' || $char === '\\') {
-                $unescaped .= '\\' . $char;
-            } else {
-                $unescaped .= $char;
-            }
-        }
-        return $unescaped;
     }
 
 }
