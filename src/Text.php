@@ -1,12 +1,11 @@
 <?php
-namespace string;
+namespace text;
 
 use Closure;
 use Exception;
 use InvalidArgumentException;
-use set\Set;
 
-class String
+class Text
 {
     /**
      * Replaces variable placeholders inside a string with any given data. Each key
@@ -117,17 +116,16 @@ class String
     {
         $defaults = [
             'quote'  => '"',
-            'object' => [
-                'method' => '__toString'
-            ],
-            'array'  => [
-                'indent' => 1,
-                'char' => ' ',
-                'multiplier' => 4
-            ]
+            'object' => [],
+            'array'  => []
         ];
 
-        $options = Set::merge($defaults, $options);
+        $options += $defaults;
+        $options['object'] += ['method' => '__toString'];
+        $options['array'] += ['indent' => 1,
+            'char' => ' ',
+            'multiplier' => 4
+        ];
 
         if ($value instanceof Closure) {
             return '`Closure`';

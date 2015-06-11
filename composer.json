@@ -1,19 +1,18 @@
 {
-    "name": "crysalead/string",
+    "name": "crysalead/text",
     "description": "String manipulation library",
     "keywords": ["String manipulation"],
     "license": "MIT",
     "require": {
-        "php": ">=5.4",
-        "crysalead/set": "dev-master"
+        "php": ">=5.4"
     },
     "require-dev": {
         "crysalead/kahlan": "dev-master"
     },
     "autoload": {
         "psr-4": {
-            "string\\": "src/",
-            "string\\spec\\": "spec/"
+            "text\\": "src/",
+            "text\\spec\\": "spec/"
         }
     },
     "config": {
