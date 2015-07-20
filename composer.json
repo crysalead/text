@@ -7,7 +7,7 @@
         "php": ">=5.4"
     },
     "require-dev": {
-        "crysalead/kahlan": "dev-master"
+        "crysalead/kahlan": "~1.1"
     },
     "autoload": {
         "psr-4": {
@@ -17,6 +17,5 @@
     },
     "config": {
         "bin-dir": "bin"
-    },
-    "minimum-stability": "dev"
+    }
 }
