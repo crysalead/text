@@ -149,6 +149,15 @@ describe("Text", function() {
 
         });
 
+        it("cleans placeholder with special chars", function() {
+
+            $string = '${a} ${b}';
+            $expected = '';
+            $result = Text::clean($string, ['before' => '${', 'after' => '}']);
+            expect($result)->toBe($expected);
+
+        });
+
     });
 
 });

@@ -38,7 +38,7 @@ class Text
         extract($options);
 
         $begin = $escape ? '(?<!' . preg_quote($escape) . ')' . preg_quote($before) : preg_quote($before);
-        $end = preg_quote($options['after']);
+        $end = preg_quote($after);
 
         foreach ($data as $placeholder => $val) {
             $val = (is_array($val) || is_resource($val) || $val instanceof Closure) ? '' : $val;
@@ -48,7 +48,7 @@ class Text
         if ($escape) {
             $str = preg_replace('/' . preg_quote($escape) . preg_quote($before) . '/', $before, $str);
         }
-        return $options['clean'] ? static::clean($str, $options) : $str;
+        return $clean ? static::clean($str, $options) : $str;
     }
 
     /**
@@ -81,7 +81,7 @@ class Text
         extract($options);
 
         $begin = $escape ? '(?<!' . preg_quote($escape) . ')' . preg_quote($before) : preg_quote($before);
-        $end = preg_quote($options['after']);
+        $end = preg_quote($after);
 
         $callback = function($matches) use ($replacement) {
             if (isset($matches[2]) && isset($matches[3]) && trim($matches[2]) === trim($matches[3])) {
@@ -91,7 +91,7 @@ class Text
             }
             return $replacement;
         };
-        $str = preg_replace_callback('/(' . $gap. $before . $word . $after . $gap .')+/', $callback, $str);
+        $str = preg_replace_callback('/(' . $gap. $begin . $word . $end . $gap .')+/', $callback, $str);
         if ($escape) {
             $str = preg_replace('/' . preg_quote($escape) . preg_quote($before) . '/', $before, $str);
         }
