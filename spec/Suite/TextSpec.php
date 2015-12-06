@@ -1,11 +1,13 @@
 <?php
-namespace text\spec\suite;
+namespace Lead\Text\Spec\Suite;
 
 use stdClass;
 use Exception;
-use text\Text;
-use kahlan\plugin\Stub;
 use InvalidArgumentException;
+use Lead\Text\Text;
+
+use Kahlan\Plugin\Stub;
+
 
 describe("Text", function() {
 

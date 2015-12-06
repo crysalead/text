@@ -4,15 +4,19 @@
     "keywords": ["String manipulation"],
     "license": "MIT",
     "require": {
-        "php": ">=5.5"
+        "php": ">=5.4"
     },
     "require-dev": {
-        "crysalead/kahlan": "~1.2"
+        "crysalead/kahlan": "~2.0"
     },
     "autoload": {
         "psr-4": {
-            "text\\": "src/",
-            "text\\spec\\": "spec/"
+            "Lead\\Text\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Lead\\Spec\\Text\\": "spec/"
         }
     },
     "config": {

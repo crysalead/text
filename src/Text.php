@@ -1,5 +1,5 @@
 <?php
-namespace text;
+namespace Lead\Text;
 
 use Closure;
 use Exception;
