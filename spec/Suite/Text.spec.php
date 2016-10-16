@@ -6,7 +6,7 @@ use Exception;
 use InvalidArgumentException;
 use Lead\Text\Text;
 
-use Kahlan\Plugin\Stub;
+use Kahlan\Plugin\Double;
 
 
 describe("Text", function() {
@@ -27,10 +27,10 @@ describe("Text", function() {
             $string = 'Obi-Wan is a {:noun}.';
             $expected = 'Obi-Wan is a jedi.';
 
-            $stub = Stub::create();
-            Stub::on($stub)->method('__toString')->andReturn('jedi');
+            $double = Double::instance();
+            allow($double)->toReceive('__toString')->andReturn('jedi');
 
-            $result = Text::insert($string, ['noun' => $stub]);
+            $result = Text::insert($string, ['noun' => $double]);
             expect($result)->toBe($expected);
 
         });
